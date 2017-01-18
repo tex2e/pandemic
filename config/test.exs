@@ -17,12 +17,3 @@ config :pandemic, Pandemic.Repo,
   database: "pandemic_test",
   hostname: "localhost",
   pool: Ecto.Adapters.SQL.Sandbox
-
-# Configure your database
-config :pandemic, Pandemic.Repo,
-  adapter: Ecto.Adapters.Postgres,
-  username: "postgres",
-  password: "postgres",
-  database: "pandemic_test",
-  hostname: "localhost",
-  pool: Ecto.Adapters.SQL.Sandbox

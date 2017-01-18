@@ -40,12 +40,3 @@ config :pandemic, Pandemic.Repo,
   database: "pandemic_dev",
   hostname: "localhost",
   pool_size: 10
-
-# Configure your database
-config :pandemic, Pandemic.Repo,
-  adapter: Ecto.Adapters.Postgres,
-  username: "postgres",
-  password: "postgres",
-  database: "pandemic_dev",
-  hostname: "localhost",
-  pool_size: 10
