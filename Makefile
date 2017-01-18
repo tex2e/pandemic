@@ -1,15 +1,27 @@
 
 UNAME := $(shell uname)
 
-# TODO: ifeq $UNAME, Darwin
-#       postgresql-start:
-#           macos-command
 
-postgresql-start-mac:
+ifeq ($(UNAME), Darwin)
+
+postgresql-start:
 	pg_ctl -D /usr/local/var/postgres -l /usr/local/var/log/postgres start
 
-postgresql-stop-mac:
+postgresql-stop:
 	pg_ctl -D /usr/local/pgsql/data stop
+
+endif
+
+ifeq ($(UNAME), Linux)
+
+postgresql-start:
+	/etc/init.d/postgresql start
+
+postgresql-stop:
+	/etc/init.d/postgresql stop
+
+endif
+
 
 postgresql-list:
 	psql -l
@@ -21,13 +33,7 @@ postgresql-login:
 	psql -U postgres -d postgres
 
 
-postgresql-start-ubuntu:
-	/etc/init.d/postgresql start
-
-postgresql-stop-ubuntu:
-	/etc/init.d/postgresql stop
-
-exenv-ubuntu:
+exenv:
 	@echo "# type following commands"
 	@echo
 	@echo 'export PATH="$$HOME/.exenv/bin:$$PATH"'
