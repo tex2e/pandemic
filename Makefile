@@ -1,4 +1,10 @@
 
+UNAME := $(shell uname)
+
+# TODO: ifeq $UNAME, Darwin
+#       postgresql-start:
+#           macos-command
+
 postgresql-start-mac:
 	pg_ctl -D /usr/local/var/postgres -l /usr/local/var/log/postgres start
 
@@ -10,6 +16,9 @@ postgresql-list:
 
 postgresql-create-db:
 	psql postgres -c "create database pandemic_dev"
+
+postgresql-login:
+	psql -U postgres -d postgres
 
 
 postgresql-start-ubuntu:
