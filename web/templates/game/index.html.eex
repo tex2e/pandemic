@@ -1,5 +1,5 @@
 
-<div class="container">
+<div id="pandemic" class="container">
   <div class="heading">
     <h1 class="title">Pandemic</h1>
   </div>
@@ -41,14 +41,6 @@
     <div class="tile-removed-container"></div>
   </div>
 </div>
-
-<script src="<%= static_path(@conn, "/js/game/utils.js") %>"></script>
-<script src="<%= static_path(@conn, "/js/game/tile.js") %>"></script>
-<script src="<%= static_path(@conn, "/js/game/grid.js") %>"></script>
-<script src="<%= static_path(@conn, "/js/game/html_actuator.js") %>"></script>
-<script src="<%= static_path(@conn, "/js/game/keyboard_input_manager.js") %>"></script>
-<script src="<%= static_path(@conn, "/js/game/game_manager.js") %>"></script>
-<script src="<%= static_path(@conn, "/js/game/main.js") %>"></script>
 
 <!--
 <div id="messages"></div>

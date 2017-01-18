@@ -2,8 +2,9 @@
   "repository": {},
   "license": "MIT",
   "scripts": {
-    "deploy": "brunch build --production",
-    "watch": "brunch watch --stdin"
+    "build": "node_modules/brunch/bin/brunch build",
+    "deploy": "node_modules/brunch/bin/brunch build --production",
+    "watch": "node_modules/brunch/bin/brunch watch --stdin"
   },
   "dependencies": {
     "phoenix": "file:deps/phoenix",
