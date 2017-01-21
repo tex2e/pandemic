@@ -155,9 +155,11 @@ GameManager.prototype.move = function (direction) {
         tile.syringe = true;
         self.won = true;
         console.log("Finish developing vaccine: " + tile.type);
+        window.channel.push("new_event", {body: "finish: " + tile.type});
       } else if (tile.value >= 20 && tile.type !== self.copeWith) {
         tile.pack = true;
         console.log("Share knowledge: " + tile.type);
+        window.channel.push("new_event", {body: "share: " + tile.type});
       }
     })
   });

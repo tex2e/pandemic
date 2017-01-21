@@ -18,4 +18,25 @@ import "phoenix_html"
 // Local files can be imported directly using relative
 // paths "./socket" or full ones "web/static/js/socket".
 
+import Utils from "./utils"
 import socket from "./socket"
+
+let channel = socket.channels[0]
+let gameEventEmit = $("#game-event-emit")
+let gameEventOn = $("#game-event-on")
+
+window.channel = channel;
+
+// emit
+gameEventEmit.submit(function () {
+  let val = $(this).find("input[type=text]").val()
+  channel.push("new_event", {body: val})
+  return false;
+})
+
+// on
+channel.on("new_event", payload => {
+  let eventItem = $("<li>");
+  eventItem.text(`[${Date()}] ${payload.body}`)
+  gameEventOn.append(eventItem)
+})

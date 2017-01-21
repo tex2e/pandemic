@@ -1475,11 +1475,53 @@ require.register("web/static/js/app.js", function(exports, require, module) {
 
 require("phoenix_html");
 
+var _utils = require("./utils");
+
+var _utils2 = _interopRequireDefault(_utils);
+
 var _socket = require("./socket");
 
 var _socket2 = _interopRequireDefault(_socket);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+// Import local files
+//
+// Local files can be imported directly using relative
+// paths "./socket" or full ones "web/static/js/socket".
+
+var channel = _socket2.default.channels[0]; // Brunch automatically concatenates all files in your
+// watched paths. Those paths can be configured at
+// config.paths.watched in "brunch-config.js".
+//
+// However, those files will only be executed if
+// explicitly imported. The only exception are files
+// in vendor, which are never wrapped in imports and
+// therefore are always executed.
+
+// Import dependencies
+//
+// If you no longer want to use a dependency, remember
+// to also remove its path from "config.paths.watched".
+
+var gameEventEmit = $("#game-event-emit");
+var gameEventOn = $("#game-event-on");
+
+window.channel = channel;
+
+// emit
+gameEventEmit.submit(function () {
+  var val = $(this).find("input[type=text]").val();
+  channel.push("new_event", { body: val });
+  return false;
+});
+
+// on
+channel.on("new_event", function (payload) {
+  var eventItem = $("<li>");
+  eventItem.text("[" + Date() + "] " + payload.body);
+  gameEventOn.append(eventItem);
+});
 });
 
 ;require.register("web/static/js/socket.js", function(exports, require, module) {
@@ -1489,7 +1531,16 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
+var _utils = require("./utils");
+
+var _utils2 = _interopRequireDefault(_utils);
+
 var _phoenix = require("phoenix");
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+// NOTE: The contents of this file will only be executed if
+// you uncomment its entry in "web/static/js/app.js".
 
 var socket = new _phoenix.Socket("/socket", { params: { token: window.userToken } });
 
@@ -1537,45 +1588,45 @@ var socket = new _phoenix.Socket("/socket", { params: { token: window.userToken 
 // Finally, pass the token on connect as below. Or remove it
 // from connect if you don't care about authentication.
 
-// NOTE: The contents of this file will only be executed if
-// you uncomment its entry in "web/static/js/app.js".
-
 // To use Phoenix channels, the first step is to import Socket
 // and connect at the socket path in "lib/my_app/endpoint.ex":
 socket.connect();
 
-var channel = socket.channel("room:lobby", {});
-var chatInput = document.querySelector("#chat-input");
-var messagesContainer = document.querySelector("#messages");
-
-if (chatInput) {
-  chatInput.addEventListener("keypress", function (event) {
-    if (event.keyCode === 13 /* Enter */) {
-        channel.push("new_msg", { body: chatInput.value });
-        chatInput.value = "";
-      }
-  });
+var channel = void 0;
+switch (_utils2.default.getParameterByName('room')) {
+  case "1":
+    channel = socket.channel("game:room1", {});
+    break;
+  default:
+    channel = socket.channel("game:lobby", {});
 }
-
-channel.on("new_msg", function (payload) {
-  var messageItem = document.createElement("li");
-  messageItem.innerText = "[" + Date() + "] " + payload.body;
-  messagesContainer.appendChild(messageItem);
-});
 
 // Now that you are connected, you can join channels with a topic:
 // let channel = socket.channel("topic:subtopic", {})
 channel.join().receive("ok", function (resp) {
-  console.log("Joined successfully", resp);
+  console.log("Joined successfully", channel);
 }).receive("error", function (resp) {
-  console.log("Unable to join", resp);
+  console.log("Unable to join", channel);
 });
 
 exports.default = socket;
 });
 
-;require.alias("phoenix/priv/static/phoenix.js", "phoenix");
-require.alias("phoenix_html/priv/static/phoenix_html.js", "phoenix_html");require.register("___globals___", function(exports, require, module) {
+;require.register("web/static/js/utils.js", function(exports, require, module) {
+'use strict';
+
+// utils.js
+
+function getParameterByName(name) {
+  var match = RegExp('[?&]' + name + '=([^&]*)').exec(window.location.search);
+  return match && decodeURIComponent(match[1].replace(/\+/g, ' '));
+}
+
+exports.getParameterByName = getParameterByName;
+});
+
+require.alias("phoenix_html/priv/static/phoenix_html.js", "phoenix_html");
+require.alias("phoenix/priv/static/phoenix.js", "phoenix");require.register("___globals___", function(exports, require, module) {
   
 });})();require('___globals___');
 
@@ -1736,9 +1787,11 @@ GameManager.prototype.move = function (direction) {
         tile.syringe = true;
         self.won = true;
         console.log("Finish developing vaccine: " + tile.type);
+        window.channel.push("new_event", {body: "finish: " + tile.type});
       } else if (tile.value >= 20 && tile.type !== self.copeWith) {
         tile.pack = true;
         console.log("Share knowledge: " + tile.type);
+        window.channel.push("new_event", {body: "share: " + tile.type});
       }
     })
   });
@@ -2131,14 +2184,14 @@ KeyboardInputManager.prototype.listen = function () {
     39: 1, // Right
     40: 2, // Down
     37: 3, // Left
-    75: 0, // Vim up
-    76: 1, // Vim right
-    74: 2, // Vim down
-    72: 3, // Vim left
-    87: 0, // W
-    68: 1, // D
-    83: 2, // S
-    65: 3  // A
+    // 75: 0, // Vim up
+    // 76: 1, // Vim right
+    // 74: 2, // Vim down
+    // 72: 3, // Vim left
+    // 87: 0, // W
+    // 68: 1, // D
+    // 83: 2, // S
+    // 65: 3  // A
   };
 
   // Respond to direction keys
@@ -2154,10 +2207,10 @@ KeyboardInputManager.prototype.listen = function () {
       }
     }
 
-    // R key restarts the game
-    if (!modifiers && event.which === 82) {
-      self.restart.call(self, event);
-    }
+    // // R key restarts the game
+    // if (!modifiers && event.which === 82) {
+    //   self.restart.call(self, event);
+    // }
   });
 
   // Respond to button presses

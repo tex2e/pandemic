@@ -2,7 +2,7 @@ defmodule Pandemic.UserSocket do
   use Phoenix.Socket
 
   ## Channels
-  channel "room:*", Pandemic.RoomChannel
+  channel "game:*", Pandemic.GameChannel
 
   ## Transports
   transport :websocket, Phoenix.Transports.WebSocket
