@@ -52,13 +52,11 @@ connection is realized by Phoenix's channel and Node.js' WebSocket.
 By the way, though Node.js allow us to realize this game completely,
 I don't like Node.js tend to use a MongoDB,
 and I tired of following Node.js' advance so rapid.
-
 Ruby on Rails has a great opportunity, but when it comes to using WebSocket,
 Rails must depends on Redis and I am not familiar with it.
 
 Considering deployment on Heroku, An add-ons like MongoDB and Redis is
 a big barrier for free plan user.
-
 That's why I chose Elixir and Phoenix framework for this project.
 
 
