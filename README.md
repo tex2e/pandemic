@@ -40,18 +40,19 @@ To start your Phoenix app:
 
 Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.
 
-Ready to run in production? Please [check our deployment guides](http://www.phoenixframework.org/docs/deployment).
+Ready to run in production? Please
+[check our deployment guides](http://www.phoenixframework.org/docs/deployment).
 
 
-Game
+Game Implementation
 ---------------
 
 The game is created by JavaScript (including ES6) and each player
 connection is realized by Phoenix's channel and Node.js' WebSocket.
 
 By the way, though Node.js allow us to realize this game completely,
-I don't like Node.js tend to use a MongoDB,
-and I tired of following Node.js' advance so rapid.
+I don't like Node.js tend to use a MongoDB, and I tired of following
+an ever growing ecosystem of rich and complicated JavaScript applications.
 Ruby on Rails has a great opportunity, but when it comes to using WebSocket,
 Rails must depends on Redis and I am not familiar with it.
 
@@ -73,7 +74,8 @@ That's why I chose Elixir and Phoenix framework for this project.
 
 ### Design
 
-In the diagram that follows, Pascal case represent Class name and Camel case represent specific object or method.
+In the diagram that follows, Pascal case represent Class name and
+Camel case represent specific object or method.
 
 ~~~
 TODO:
@@ -82,7 +84,7 @@ TODO:
 ~~~
 
 
-Learn more about phoenix
+Learn more about Phoenix
 ---------------
 
   * Official website: http://www.phoenixframework.org/
